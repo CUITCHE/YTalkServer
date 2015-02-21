@@ -43,3 +43,5 @@ Temporary Items
 .apdisk
 YTalkServer/Debug/*
 YTalkServer/GeneratedFiles/*
+Win32/*
+*.suo

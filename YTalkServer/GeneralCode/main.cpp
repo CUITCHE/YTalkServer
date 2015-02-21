@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include <QtWidgets/QApplication>
 #include <QDebug>
-
+#include "SettingHelper.h"
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	qDebug() << "nihÄãºÃ";
-	printf("nihÄãºÃ");
+	SettingHelper::setValue("serverName", "²âÊÔ");
+	SettingHelper::sync();
 	return a.exec();
 }

@@ -27,6 +27,16 @@
     <Filter Include="DB">
       <UniqueIdentifier>{00f75774-4a9a-4319-91aa-96218fd013e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;cxx;c;def</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneralCode\main.cpp">
@@ -35,10 +45,51 @@
     <ClCompile Include="GeneralCode\stdafx.cpp">
       <Filter>GeneralCode</Filter>
     </ClCompile>
+    <ClCompile Include="DB\DBModule.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralCode\SettingHelper.cpp">
+      <Filter>GeneralCode</Filter>
+    </ClCompile>
+    <ClCompile Include="DB\MSSQLConnectionHelper.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MSSQLConnectionHelper.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MSSQLConnectionHelper.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralCode\AbstractParseJson.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AbstractParseJson.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AbstractParseJson.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneralCode\stdafx.h">
       <Filter>GeneralCode</Filter>
     </ClInclude>
+    <ClInclude Include="DB\DBModule.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralCode\SettingHelper.h">
+      <Filter>GeneralCode</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralCode\defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="DB\MSSQLConnectionHelper.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GeneralCode\AbstractParseJson.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
