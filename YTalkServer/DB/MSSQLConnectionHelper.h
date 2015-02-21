@@ -10,34 +10,18 @@
 				不采用prepare模式，此类不包含数据成员，采用prepare模式
 				反而累赘
 *********************************************************************/
-#include "AbstractParseJson.h"
+#include "SettingInfo.h"
 #include <QtSql/QSql>
 #include <QSqlQuery>
 #include <QSqlError>
 
-class DBInfo : public AbstractParseJson
-{
-	Q_OBJECT
-public:
-	QT_MOC_GET_SETTER(QString, serverName, ServerName);
-	QT_MOC_GET_SETTER(QString, serverPort, serverPort);
-	QT_MOC_GET_SETTER(QString, databaseName, databaseName);
-	QT_MOC_GET_SETTER(QString, userName, userName);
-	QT_MOC_GET_SETTER(QString, password, Password);
-public:
-	QString serverName;		//数据库服务ip地址
-	QString serverPort;		//端口
-	QString databaseName;	//数据库名字
-	QString userName;
-	QString password;
-};
 class MSSQLConnectionHelper
 {
 public:
 	MSSQLConnectionHelper() = delete;
 	~MSSQLConnectionHelper() = delete;
 	//连接到数据库
-	static QSqlError::ErrorType initConnection(const DBInfo &info);
+	static QSqlError::ErrorType initConnection(const SettingInfo &info);
 
 	//断开数据库连接
 	static void closeConnection();

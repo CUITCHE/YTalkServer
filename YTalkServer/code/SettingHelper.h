@@ -16,8 +16,12 @@ class SettingHelper
 public:
 	QVariant getValue(const char *key);
 	void setValue(const char *key, const QVariant &val);
+
 	//保存设置过的值到文件
 	void sync();
+
+	//获取配置对象
+	const SettingInfo* getSettingInfo()const;
 private:
 	SettingHelper();
 	~SettingHelper();
@@ -27,7 +31,7 @@ private:
 private:
 	bool needFlush;
 	QFile *fileCache;
-	DBInfo *dbinfoCache;		//服务配置缓存
+	SettingInfo *dbinfoCache;		//服务配置缓存
 };
 
 #endif // SETTINGHELPER_H

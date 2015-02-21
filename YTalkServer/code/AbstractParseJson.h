@@ -33,6 +33,8 @@ public:
 
 	//从序列化json数据中提取数据，实例化到类的成员
 	void write(const QVariantMap &val);
+
+	//读取数据成员，序列化为json数据
 	QVariantMap read();
 };
 

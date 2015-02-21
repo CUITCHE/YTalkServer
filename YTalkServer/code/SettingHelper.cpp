@@ -19,7 +19,7 @@ SettingHelper::SettingHelper()
 		json = QJsonDocument::fromJson("{}");
 	}
 	auto info = json.toVariant().toMap();
-	dbinfoCache = new DBInfo;
+	dbinfoCache = new SettingInfo;
 	dbinfoCache->write(info);
 }
 
@@ -58,4 +58,9 @@ void SettingHelper::maybeNeedFlush()
 	stream << data;
 	fileCache->flush();
 	needFlush = false;
+}
+
+const SettingInfo* SettingHelper::getSettingInfo() const
+{
+	return dbinfoCache;
 }

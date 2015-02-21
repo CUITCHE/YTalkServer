@@ -27,7 +27,7 @@ private:
 	DBModule(QObject *parent = 0);
 	~DBModule();
 private:
-	DBInfo databaseInfo;
+	SettingInfo *databaseInfo;
 };
 
 #endif // DBMODULE_H

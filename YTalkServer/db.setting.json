@@ -1,6 +1,6 @@
 {
     "serverName": "local",
-    "serverPort": "",
+    "serverPort": "1433",
     "databaseName": "YTalk",
     "userName": "ytalk_sa",
     "password": "123456"

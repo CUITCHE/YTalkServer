@@ -17,7 +17,7 @@ class QVariant;
 class Pakcet : public AbstractParseJson
 {
 	Q_OBJECT
-public:
+
 	QT_MOC_MINE_DEFINITION(int, protocol, Protocol);
 public:
 	Pakcet(NetCommunicationProtocol _protocol = Empty, QObject *parent = 0);
