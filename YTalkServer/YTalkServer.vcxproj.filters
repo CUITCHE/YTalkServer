@@ -69,6 +69,21 @@
     <ClCompile Include="GeneratedFiles\Release\moc_AbstractParseJson.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneralCode\Pakcet.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Pakcet.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Pakcet.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TestPacket.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TestPacket.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneralCode\stdafx.h">
@@ -83,12 +98,21 @@
     <ClInclude Include="GeneralCode\defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GeneralCode\NetCommunicationProtocol.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="DB\MSSQLConnectionHelper.h">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="GeneralCode\AbstractParseJson.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GeneralCode\Pakcet.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="test\TestPacket.hpp">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

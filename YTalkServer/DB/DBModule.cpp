@@ -1,12 +1,11 @@
 #include "stdafx.h"
 #include "DBModule.h"
 #include "SettingHelper.h"
-DBModule* DBModule::uniqueInstance = nullptr;
+PREPARE_INSTANCE_DEFINITION(DBModule);
 
 DBModule::DBModule(QObject *parent)
 	:QThread(parent)
 {
-	uniqueInstance = this;
 }
 
 DBModule::~DBModule()
@@ -14,27 +13,15 @@ DBModule::~DBModule()
 
 }
 
-DBModule* DBModule::instance()
-{
-	if (uniqueInstance){
-		return uniqueInstance;
-	}
-	return new DBModule;
-}
-
-void DBModule::deleteInstacen(DBModule *object)
-{
-	delete object;
-}
-
-void DBModule::initDBConnect()
+void DBModule::initConnect()
 {
 	//从配置文件中读取数据库的相关信息
-	databaseInfo.serverName = SettingHelper::getValue("serverName").toString();
-	databaseInfo.serverPort = SettingHelper::getValue("serverPort").toString();
-	databaseInfo.databaseName = SettingHelper::getValue("databaseName").toString();
-	databaseInfo.userName = SettingHelper::getValue("userName").toString();
-	databaseInfo.password = SettingHelper::getValue("password").toString();
+	GET_INSTANCE(SettingHelper);
+	databaseInfo.serverName = ins->getValue("serverName").toString();
+	databaseInfo.serverPort = ins->getValue("serverPort").toString();
+	databaseInfo.databaseName = ins->getValue("databaseName").toString();
+	databaseInfo.userName = ins->getValue("userName").toString();
+	databaseInfo.password = ins->getValue("password").toString();
 	QSqlError::ErrorType errorType;
 	qDebug() << "****************数据库服务模块初始化****************";
 	qDebug() << "默认配置:";
@@ -49,9 +36,20 @@ void DBModule::initDBConnect()
 		++trycount;
 		errorType = MSSQLConnectionHelper::initConnection(databaseInfo);
 		if (trycount > 0){
-			qDebug() << "连接数据库失败" << trycount << "次，正在尝试重新连接......";
+			qDebug() << "连接数据库失败" << trycount << "次，5秒后尝试重新连接......";
 			QThread::msleep(5 * 1000);
 		}
 	} while (errorType != QSqlError::NoError);
 	qDebug() << "数据库连接成功!";
+}
+
+void DBModule::disconnect()
+{
+	MSSQLConnectionHelper::closeConnection();
+}
+
+void DBModule::reconnect()
+{
+	disconnect();
+	MSSQLConnectionHelper::initConnection(databaseInfo);
 }

@@ -6,26 +6,28 @@
 	file base:	DBModule
 	author:		CHE
 	
-	purpose:	对数据库操作控制
+	purpose:	对数据库操作控制，利用prepare模式。把DBModule类
+				改写为面向对象的类模式，而取消了静态调用操作
 *********************************************************************/
 #include "MSSQLConnectionHelper.h"
 #include <QThread>
 class DBModule: QThread
 {
+	PREPARE_INSTANCE_DECLARE(DBModule)
 public:
-	~DBModule();
-	//获取全局唯一的DBModule
-	static DBModule* instance();
+	//初始化数据库连接
+	void initConnect();
 
-	//删除指定的DBModule
-	static void deleteInstacen(DBModule *object);
+	//关闭数据库连接
+	void disconnect();
 
-	void initDBConnect();
+	//重新连接数据库
+	void reconnect();
 private:
 	DBModule(QObject *parent = 0);
+	~DBModule();
 private:
 	DBInfo databaseInfo;
-	static DBModule *uniqueInstance;
 };
 
 #endif // DBMODULE_H

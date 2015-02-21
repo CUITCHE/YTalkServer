@@ -12,8 +12,10 @@ AbstractParseJson::~AbstractParseJson()
 
 }
 
-void AbstractParseJson::qobject2qvariant(const QObject *object, QVariantMap &variant)
+void AbstractParseJson::qobject2qvariant(QVariantMap &variant)
 {
+	const QObject *object = dynamic_cast<QObject *>(this);
+
 	const QMetaObject *metaobject = object->metaObject();
 	int count = metaobject->propertyCount();
 	for (int i = 1; i < count; ++i){
@@ -24,8 +26,9 @@ void AbstractParseJson::qobject2qvariant(const QObject *object, QVariantMap &var
 	}
 }
 
-void AbstractParseJson::qvariant2qobject(const QVariantMap &variant, QObject *object)
+void AbstractParseJson::qvariant2qobject(const QVariantMap &variant)
 {
+	QObject *object = dynamic_cast<QObject *>(this);
 	const QMetaObject *metaobject = object->metaObject();
 	QVariantMap::const_iterator iter = variant.constBegin();
 	int index = -1;
@@ -44,4 +47,26 @@ void AbstractParseJson::qvariant2qobject(const QVariantMap &variant, QObject *ob
 		}
 		++iter;
 	}
+}
+
+QVariant AbstractParseJson::getValue(const char *key)
+{
+	return this->property(key);
+}
+
+void AbstractParseJson::setValue(const char *key, const QVariant &val)
+{
+	this->setProperty(key, val);
+}
+
+void AbstractParseJson::write(const QVariantMap &val)
+{
+	this->qvariant2qobject(val);
+}
+
+QVariantMap AbstractParseJson::read()
+{
+	QVariantMap data;
+	this->qobject2qvariant(data);
+	return data;
 }

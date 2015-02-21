@@ -4,17 +4,14 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QTextStream>
-SettingHelper* SettingHelper::instance = nullptr;
+PREPARE_INSTANCE_DEFINITION(SettingHelper);
 
-SettingHelper::SettingHelper(QObject *parent)
-	:AbstractParseJson(parent)
-	, needFlush(false)
+SettingHelper::SettingHelper()
+	: needFlush(false)
 {
 	fileCache = new QFile("db.setting.json");
-	if (fileCache->open(QIODevice::ReadWrite) == false){
-		QMessageBox::information(nullptr, "提示", "db.seeting.json配置文件不存在！", QMessageBox::Yes);
-		exit(1);
-	}
+	fileCache->open(QIODevice::ReadWrite);
+
 	auto data = fileCache->readAll();
 	QJsonParseError error;
 	QJsonDocument json = QJsonDocument::fromJson(data, &error);
@@ -23,7 +20,7 @@ SettingHelper::SettingHelper(QObject *parent)
 	}
 	auto info = json.toVariant().toMap();
 	dbinfoCache = new DBInfo;
-	qvariant2qobject(info, dbinfoCache);
+	dbinfoCache->write(info);
 }
 
 SettingHelper::~SettingHelper()
@@ -35,27 +32,18 @@ SettingHelper::~SettingHelper()
 
 QVariant SettingHelper::getValue(const char *key)
 {
-	checkInstance();
-	return instance->dbinfoCache->property(key);
+	return dbinfoCache->getValue(key);
 }
 
 void SettingHelper::setValue(const char *key, const QVariant &val)
 {
-	checkInstance();
-	instance->dbinfoCache->setProperty(key, val);
-	instance->needFlush = true;
-}
-
-void SettingHelper::checkInstance()
-{
-	if (instance == nullptr){
-		instance = new SettingHelper;
-	}
+	dbinfoCache->setValue(key, val);
+	needFlush = true;
 }
 
 void SettingHelper::sync()
 {
-	instance->maybeNeedFlush();
+	maybeNeedFlush();
 }
 
 void SettingHelper::maybeNeedFlush()
@@ -64,8 +52,7 @@ void SettingHelper::maybeNeedFlush()
 		return;
 	}
 	
-	QVariantMap variant;
-	qobject2qvariant(dbinfoCache, variant);
+	QVariantMap variant = dbinfoCache->read();
 	auto data = QJsonDocument::fromVariant(variant).toJson();
 	QTextStream stream(fileCache);
 	stream << data;

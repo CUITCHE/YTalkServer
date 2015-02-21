@@ -7,13 +7,15 @@
 	author:		CHE
 	
 	purpose:	采用odbc连接到MSSQL
+				不采用prepare模式，此类不包含数据成员，采用prepare模式
+				反而累赘
 *********************************************************************/
-#include "defs.h"
+#include "AbstractParseJson.h"
 #include <QtSql/QSql>
 #include <QSqlQuery>
 #include <QSqlError>
 
-class DBInfo: public QObject
+class DBInfo : public AbstractParseJson
 {
 	Q_OBJECT
 public:
