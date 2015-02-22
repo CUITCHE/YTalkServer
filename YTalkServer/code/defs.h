@@ -17,8 +17,10 @@
 	GET_SETTER(Type, variable, name)\
 	Q_PROPERTY(Type variable READ get##name WRITE set##name)\
 
-//把定义变量和宏声明结合在一起，
+//把定义变量和QT的MOC PROPERTY宏声明结合在一起，
 //呃，我是个大懒鬼-_-...
+//变量variable，有自己的get-set方法，名为
+//get##name(),set##name()，返回值或传入值均为const引用
 #define QT_MOC_MINE_DEFINITION(Type, variable, name)\
 	private:Type variable;\
 	public: QT_MOC_GET_SETTER(Type, variable, name)\
@@ -26,9 +28,9 @@
 
 //在类声明处书写，称为prepare模式，它适用于有数据成员
 //但不需要编译器或编码人员管理类对象的生命周期。
-//此模式下，须将checkInstance()负责生成唯一实例。
-//类的构造函数和析构函数的控制权限设为非public。
-//instance()返回类对象。
+//此模式下，checkInstance()负责生成唯一实例，
+//须将类的构造函数和析构函数的控制权限设为非public。
+//instance()返回类对象，
 //deleteInstance()删除对象。
 //可以根据需要，自定义他们的实现，也可以在类的定义处。
 //调用PREPARE_INSTANCE_DEFINITION宏实现默认定义。

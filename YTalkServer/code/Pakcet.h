@@ -21,6 +21,7 @@ class Pakcet : public AbstractParseJson
 	QT_MOC_MINE_DEFINITION(int, protocol, Protocol);
 public:
 	Pakcet(NetCommunicationProtocol _protocol = Empty, QObject *parent = 0);
+	static int Protocol(const QVariantMap &json);
 	virtual ~Pakcet();
 };
 

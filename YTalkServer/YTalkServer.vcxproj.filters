@@ -96,6 +96,18 @@
     <ClCompile Include="GeneratedFiles\Release\moc_TestPacket.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="network\NetLogicMainProcess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_NetLogicMainProcess.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_NetLogicMainProcess.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="network\InstantiationPacketHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DB\DBModule.h">
@@ -112,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="code\stdafx.h">
       <Filter>GeneralCode</Filter>
+    </ClInclude>
+    <ClInclude Include="network\InstantiationPacketHelper.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -131,6 +146,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="test\TestPacket.hpp">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="network\NetLogicMainProcess.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

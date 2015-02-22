@@ -12,3 +12,8 @@ Pakcet::~Pakcet()
 {
 
 }
+
+int Pakcet::Protocol(const QVariantMap &json)
+{
+	return json.value("protocol").toInt();
+}

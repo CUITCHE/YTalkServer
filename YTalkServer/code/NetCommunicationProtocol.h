@@ -12,7 +12,8 @@
 *********************************************************************/
 namespace net{
 	enum NetCommunicationProtocol{
-		Empty
+		Empty,
+		Test
 	};
 }
 #endif // NetCommunicationProtocol_H__
