@@ -23,11 +23,14 @@ public:
 
 	//重新连接数据库
 	void reconnect();
+
+	//test function
+	void testQuery()const;
 private:
 	DBModule(QObject *parent = 0);
 	~DBModule();
 private:
-	SettingInfo *databaseInfo;
+	SettingInfo *databaseInfo;		//指针指向SettingHelper的数据成员，这里不做内存管理
 };
 
 #endif // DBMODULE_H

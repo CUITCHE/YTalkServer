@@ -60,6 +60,7 @@ void NetLogicMainProcess::run()
 			continue;
 		}
 		NCM = m_socket->getPendingData();
+		this->task(NCM);
 	}
 }
 
@@ -70,6 +71,7 @@ void NetLogicMainProcess::task(const NetCommunicationModule &NCM)
 	QJsonDocument jsonDocument = QJsonDocument::fromJson(NCM.data, &error);
 	if (error.error != QJsonParseError::NoError){
 		qDebug() << "json parse error! in" << __FUNCSIG__;
+		qDebug() << "data of recieving is :\"" << NCM.data << "\"";
 		return;
 	}
 	QVariantMap data = jsonDocument.toVariant().toMap();

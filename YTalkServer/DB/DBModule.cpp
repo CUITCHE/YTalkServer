@@ -5,6 +5,7 @@ PREPARE_INSTANCE_DEFINITION(DBModule);
 
 DBModule::DBModule(QObject *parent)
 	:QThread(parent)
+	, databaseInfo(nullptr)
 {
 }
 
@@ -36,7 +37,6 @@ void DBModule::initConnect()
 			QThread::msleep(5 * 1000);
 		}
 	} while (errorType != QSqlError::NoError);
-	qDebug() << "数据库连接成功!";
 }
 
 void DBModule::disconnect()
@@ -47,5 +47,15 @@ void DBModule::disconnect()
 void DBModule::reconnect()
 {
 	disconnect();
+	if (databaseInfo == nullptr){
+		GET_INSTANCE(SettingHelper);
+		databaseInfo = const_cast<SettingInfo*>(ins->getSettingInfo());
+	}
 	MSSQLConnectionHelper::initConnection(*databaseInfo);
+}
+
+void DBModule::testQuery() const
+{
+	QString sql = "insert into ytalk_user(mailAddress,password) values('dsfew',43231243)";
+	MSSQLConnectionHelper::execDML(sql);
 }

@@ -33,7 +33,10 @@ public:
 	//返回网络通信处理模块的活动状态，return true if it is active;
 	bool isActive()const;
 protected:
+	//重写线程函数
 	void run();
+
+	//处理客户端发来的数据
 	void task(const NetCommunicationModule &NCM);
 private:
 	bool active;	//true，run() is runing,;false run() will be ending.

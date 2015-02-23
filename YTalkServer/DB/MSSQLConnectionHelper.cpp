@@ -4,18 +4,20 @@
 QSqlError::ErrorType MSSQLConnectionHelper::initConnection(const SettingInfo &info)
 {
 	QSqlDatabase mssqlDB = QSqlDatabase::addDatabase("QODBC");
-	const QString dsn = QString("Driver={sql server};SERVER=%1;PORT=%2;DATABASE=%3;UID=%4;PWD=%5;")
+	const QString dsn = QString("Driver={SQL SERVER};SERVER=%1;PORT=%2;DATABASE=%3;UID=%4;PWD=%5;")
 		.arg(info.getDBServerName())
 		.arg(info.getDBServerPort())
 		.arg(info.getDBDatabaseName())
 		.arg(info.getDBUserName())
 		.arg(info.getDBPassword());
+	mssqlDB.setUserName(info.getDBUserName());
+	mssqlDB.setPassword(info.getDBPassword());
 	//	QString dsn = "Driver={sql server};SERVER=222.18.159.25;PORT=1433;DATABASE=Queue_Share;UID=sa;PWD=Dbke6413;";
 	mssqlDB.setDatabaseName(dsn);
 	if (mssqlDB.open())
 		qDebug() << "数据库连接成功!!!";
 	else
-		qDebug() << "数据库连接失败!!!\n详细错误信息:" << mssqlDB.lastError().databaseText();
+		qDebug() << "数据库连接失败!!!\n详细错误信息:" << mssqlDB.lastError();
 	return mssqlDB.lastError().type();
 }
 

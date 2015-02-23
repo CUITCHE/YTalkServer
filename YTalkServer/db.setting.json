@@ -1,7 +1,9 @@
 {
-    "serverName": "local",
-    "serverPort": "1433",
-    "databaseName": "YTalk",
-    "userName": "ytalk_sa",
-    "password": "123456"
+    "DBServerName": "127.0.0.1",
+    "DBServerPort": "14569",
+    "DBDatabaseName": "ytalk",
+    "DBUserName": "ytalk_sa",
+    "DBPassword": "123456",
+    "serverIp": "127.0.0.1",
+    "serverPort": 0
 }

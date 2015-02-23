@@ -34,7 +34,10 @@ void AbstractParseJson::qvariant2qobject(const QVariantMap &variant)
 	int index = -1;
 	while (iter != variant.end()){
 		index = metaobject->indexOfProperty(iter.key().toLatin1());
-		if (index < 0)continue;
+		if (index < 0){
+			++iter;
+			continue;
+		}
 		QMetaProperty metaProperty = metaobject->property(index);
 		QVariant::Type type = metaProperty.type();
 		QVariant v(iter.value());
