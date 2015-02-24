@@ -26,6 +26,9 @@ public:
 
 	//test function
 	void testQuery()const;
+
+	//帐号验证服务
+	bool accountValidate(const QString &email, const QString &validateCode)const;
 private:
 	DBModule(QObject *parent = 0);
 	~DBModule();

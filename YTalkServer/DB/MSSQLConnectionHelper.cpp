@@ -10,8 +10,6 @@ QSqlError::ErrorType MSSQLConnectionHelper::initConnection(const SettingInfo &in
 		.arg(info.getDBDatabaseName())
 		.arg(info.getDBUserName())
 		.arg(info.getDBPassword());
-	mssqlDB.setUserName(info.getDBUserName());
-	mssqlDB.setPassword(info.getDBPassword());
 	//	QString dsn = "Driver={sql server};SERVER=222.18.159.25;PORT=1433;DATABASE=Queue_Share;UID=sa;PWD=Dbke6413;";
 	mssqlDB.setDatabaseName(dsn);
 	if (mssqlDB.open())

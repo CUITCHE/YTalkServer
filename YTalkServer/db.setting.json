@@ -5,5 +5,7 @@
     "DBUserName": "ytalk_sa",
     "DBPassword": "123456",
     "serverIp": "127.0.0.1",
-    "serverPort": 0
+    "serverPort": 0,
+    "httpServerIp": "127.0.0.1",
+    "httpServerPort": 8080
 }

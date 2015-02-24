@@ -108,6 +108,15 @@
     <ClCompile Include="network\InstantiationPacketHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="httpServer\HttpServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_HttpServer.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_HttpServer.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DB\DBModule.h">
@@ -149,6 +158,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="network\NetLogicMainProcess.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="httpServer\HttpServer.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

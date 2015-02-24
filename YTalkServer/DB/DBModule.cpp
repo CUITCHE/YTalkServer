@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DBModule.h"
 #include "SettingHelper.h"
+#include <QDateTime>
 PREPARE_INSTANCE_DEFINITION(DBModule);
 
 DBModule::DBModule(QObject *parent)
@@ -58,4 +59,22 @@ void DBModule::testQuery() const
 {
 	QString sql = "insert into ytalk_user(mailAddress,password) values('dsfew',43231243)";
 	MSSQLConnectionHelper::execDML(sql);
+}
+
+bool DBModule::accountValidate(const QString &email, const QString &validateCode) const
+{
+	//之后可能会加入密码的md5值的判断
+	QDateTime curTime = QDateTime::currentDateTime();
+	QString sql = QString("select identifydate from ytalk_user where mailAddress = '%1' AND identifycode='%2'")
+		.arg(email)
+		.arg(validateCode);
+	auto ret = MSSQLConnectionHelper::execQuery(sql);
+	if (!ret.next()){
+		return false;
+	}
+	auto date = ret.value("identifydate").toDateTime();
+	if (curTime < date){
+		return true;
+	}
+	return false;
 }
