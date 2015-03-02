@@ -18,6 +18,13 @@ class SettingInfo : public AbstractParseJson
 	//http用于邮箱验证的http服务器
 	QT_MOC_MINE_DEFINITION(QString, httpServerIp, HttpServerIp);
 	QT_MOC_MINE_DEFINITION(int, httpServerPort, HttpServerPort);
+	QT_MOC_MINE_DEFINITION(QString, httpServerTail, HttpServerTail);
+	//邮件服务器配置
+	QT_MOC_MINE_DEFINITION(QString, mailServerAddress, MailServerAddress);
+	QT_MOC_MINE_DEFINITION(QString, mailServerUsrName, MailServerUsrName);
+	QT_MOC_MINE_DEFINITION(QString, mailServerUsrPassword, MailServerUsrPassword);
+	QT_MOC_MINE_DEFINITION(QString, mailServerSubject, MailServerSubject);
+	QT_MOC_MINE_DEFINITION(QString, mailServerContent, MailServerContent);
 };
 
 #endif // SETTINGINFO_H

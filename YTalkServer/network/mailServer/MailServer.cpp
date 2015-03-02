@@ -1,50 +1,46 @@
-#include "stdafx.h"
 #include "MailServer.h"
+#include "SettingHelper.h"
 #include <QHostInfo>
-#include <QTcpSocket>
-#include <QThread>
+#include <WinSock2.h>
+#pragma comment(lib, "Ws2_32.lib")
 #define Quit 8
 
-QMap<QTcpSocket*, MsgSend> MailServer::s_mails_list;
-QString MailServer::username = "ytalkadmin";
-QString MailServer::pw = "jieran753";
-QString MailServer::smtpServer = "smtp.163.com";
-QMutex* MailServer::mutex = new QMutex;
-TimingThread* MailServer::thread_t_doing = nullptr;
-class TimingThread: public QThread
-{
-protected:
-	void run(){
-		forever{
-			QThread::msleep(5 * 1000);
-			MailServer::timingCheck();
-		}
+//facade of function send()
+void Send(int& s, const QByteArray& data) {
+	if (send(s, data, data.length(), 0) == SOCKET_ERROR) {
+		qDebug() << "send data \"" << data << "\" error";
 	}
-};
+}
+
+//facade of function recv()
+void Recv(int& s, char* buf, int len) {
+	memset(buf, 0, len);
+	if (recv(s, buf, len, 0) == SOCKET_ERROR) {
+		qDebug() << "error, while receiving data";
+	}
+}
+
 MailServer::MailServer(QObject *parent)
-	: QObject(parent)
-	, sendStep(-1)
+	: QThread(parent)
+	, serverSocketStep(0)
+	, waitToSendList(new QList<MsgSend>)
+	, username(new QString)
+	, password(new QString)
+	, smtpServerAddress(new QString)
+	, mutex(new QMutex)
 {
-	if (thread_t_doing == nullptr){
-		thread_t_doing = new TimingThread;
-		thread_t_doing->start();
-	}
+
 }
 
 MailServer::~MailServer()
 {
 
 }
-void MailServer::sendMail(const QString &sendTor, const QString &sendData)
-{	
-	static QHostInfo hostInfo = QHostInfo::fromName(smtpServer);
-	QTcpSocket *sock = new QTcpSocket(this);
-	{
-		QMutexLocker locker(mutex);
-		s_mails_list.insert(sock, { sock, sendTor, sendData });
-	}
-	sock->connectToHost(hostInfo.addresses().at(0), 25);
-	connect(sock, &QTcpSocket::readyRead, this, &MailServer::onReadyRead);
+void MailServer::sendMail(const QByteArray &sendTor, const QByteArray &sendData)
+{
+	mutex->lock();
+	waitToSendList->push_back({ sendTor, sendData });
+	mutex->unlock();
 /*
 	sockaddr_in sin;
 	memset(&sin, 0, sizeof(sin));
@@ -62,7 +58,7 @@ void MailServer::sendMail(const QString &sendTor, const QString &sendData)
 	//
 	char recvBuffer[1024];
 	Recv(s, recvBuffer, sizeof(recvBuffer));    //wait for greeting message
-	Send(s, QString("HELO ") + smtpServer + "\r\n");
+	Send(s, QString("HELO ") + smtpServerAddress + "\r\n");
 	Recv(s, recvBuffer, sizeof(recvBuffer));    //should recv "250 OK"
 
 	//start to log in    
@@ -76,7 +72,7 @@ void MailServer::sendMail(const QString &sendTor, const QString &sendData)
 		return false;
 	}
 
-	Send(s, pw.toLatin1().toBase64() + "\r\n");
+	Send(s, password.toLatin1().toBase64() + "\r\n");
 	Recv(s, recvBuffer, sizeof(recvBuffer));
 	if (QString(recvBuffer).mid(0, 3) != "235") {
 		qDebug() << "password error";
@@ -102,88 +98,111 @@ void MailServer::sendMail(const QString &sendTor, const QString &sendData)
 	closesocket(s);*/
 }
 
-void MailServer::onReadyRead()
-{
-	QTcpSocket *sock = qobject_cast<QTcpSocket*>(sender());
-	if (sock == nullptr){
-		return;
-	}
-	auto data = sock->readAll();
-	whichDo(sendStep, sock);
-}
 
-void MailServer::whichDo(int step, QTcpSocket *sock)
-{
-	++sendStep;
-	static const QByteArray hello = QByteArray("HELO ") + smtpServer.toLatin1() + "\r\n";
-	static const QByteArray authLogin = "auth login\r\n";
-	static const QByteArray userName = username.toLatin1().toBase64() + "\r\n";
-	static const QByteArray password = pw.toLatin1().toBase64() + "\r\n";
-	static const QByteArray mailFrom = "mail from:<" + username.toLatin1() + ">\r\n";
-	static const QByteArray data = "data\r\n";
-	QMap<QTcpSocket*, MsgSend>::iterator iter;
-	switch (sendStep)
-	{
-	case 0:
-		//得到邮件服务器的响应,连接到服务的时候
-		sock->write(hello);
-		break;
-	case 1:
-		//如果hello成功，将会发送登陆请求信息
-		sock->write(authLogin);
-		break;
-	case 2:
-		//登陆请求答应后，发送用户名，如果用户名错误将会导致错误
-		sock->write(userName);
-		break;
-	case 3:
-		//发送密码信息，如果密码错误，将会导致登陆失败
-		sock->write(password);
-		break;
-	case 4:
-		//发送发件人信息
-		sock->write(mailFrom);
-		break;
-	case 5:
-		//发送接收人信息
-		iter = s_mails_list.find(sock);
-		if (iter != s_mails_list.end()){
-			sock->write("rcpt to:<" + iter->sendTor.toLatin1() + ">\r\n");
-		}
-		else{
-			//结束此次邮件发送
-		}
-		break;
-	case 6:
-		//发送data请求
-		sock->write(data);
-		break;
-	case 7:
-		//发送正文信息
-		iter = s_mails_list.find(sock);
-		sock->write("to:" + iter->sendTor.toLatin1() + "\r\n"
-			+ "subject:YTalk 用户注册验证\r\n\r\n" + iter->sendData.toLatin1() + "\r\n.\r\n");
-		break;
-	case Quit:
-		//这里是退出邮件服务，可以考虑不退出，隔一段时间再退出
-		sock->write("quit\r\n");
-		break;
-	}
-}
 
-void MailServer::timingCheck()
+void MailServer::run()
 {
-	QMutexLocker locker(mutex);
-	static QMap<QTcpSocket*, MsgSend>::iterator iter_s, iter_e;
-	iter_s = s_mails_list.begin();
-	iter_e = s_mails_list.end();
-	while (iter_s != iter_e){
-		if (*iter_s){
-			iter_s.key()->abort();
-			iter_s.key()->deleteLater();
-			iter_s = s_mails_list.erase(iter_s);
+	MsgSend tmp;
+	forever{
+		if (waitToSendList->isEmpty() == true){
+			QThread::msleep(1);
 			continue;
 		}
-		++iter_s;
+		if (netCheck() == false && connectToMailServer() == false){
+			QThread::msleep(1);
+			continue;
+		}
+		
+		mutex->lock();
+		tmp = waitToSendList->takeFirst();
+		send_impl(tmp);
+		mutex->unlock();
+		//每发送一封休息一会儿
+		QThread::msleep(1);
 	}
+}
+
+bool MailServer::connectToMailServer()
+{
+	static const QByteArray hello = QByteArray("HELO ") + smtpServerAddress->toLatin1() + "\r\n";
+	static const QByteArray authLogin = "auth login\r\n";
+	static const QByteArray userName = username->toLatin1().toBase64() + "\r\n";
+	static const QByteArray password1 = password->toLatin1().toBase64() + "\r\n";
+	
+
+	try{
+		sockaddr_in addr_in;
+		memset(&addr_in, 0, sizeof(addr_in));
+		addr_in.sin_family = AF_INET;
+		addr_in.sin_port = htons(25);    //port of SMTP
+		GET_INSTANCE(SettingHelper);
+		QHostInfo ph = QHostInfo::fromName(ins->getValue("mailServerAddress").toString());
+		ULONG address = ph.addresses().at(0).toIPv4Address();
+		memcpy(&addr_in.sin_addr.S_un.S_addr, &address, sizeof(address));
+
+		//connect to the mail server
+		smptSocket = ::socket(AF_INET, SOCK_STREAM, 0);
+		if (::connect(smptSocket, (sockaddr*)&addr_in, sizeof(addr_in))) {
+			qDebug() << "failed to connect the mail server";
+			return false;
+		}
+		char recvBuffer[1024];
+		Recv(smptSocket, recvBuffer, sizeof(recvBuffer));    //wait for greeting message
+		Send(smptSocket, "HELO " + smtpServerAddress->toLatin1() + "\r\n");
+		Recv(smptSocket, recvBuffer, sizeof(recvBuffer));    //should recv "250 OK"
+
+		//start to log in    
+		Send(smptSocket, "auth login\r\n");
+		Recv(smptSocket, recvBuffer, sizeof(recvBuffer));    //should recv "334 username:"(This is the decode message)
+
+		Send(smptSocket, userName);
+		Recv(smptSocket, recvBuffer, sizeof(recvBuffer));
+		if (!(recvBuffer[0] == '3' && recvBuffer[1] == '3' && recvBuffer[2] == '4')){
+			qDebug() << "username is error!";
+			return false;
+		}
+
+		Send(smptSocket, password1);
+		Recv(smptSocket, recvBuffer, sizeof(recvBuffer));
+		if (!(recvBuffer[0] == '2' && recvBuffer[1] == '3' && recvBuffer[2] == '5')) {
+			qDebug() << "password error";
+			return false;
+		}
+	}
+	catch (...){
+		qDebug() << __FUNCSIG__ << "函数中，出现了意外失败";
+	}
+	//至此登陆完毕
+	return true;
+}
+
+void MailServer::send_impl(const MsgSend &msg)
+{
+	static const QByteArray mailFrom = "mail from:<" + username->toLatin1() + ">\r\n";
+	static const QByteArray data = "data\r\n";
+
+	static char recvBuffer[1024];
+	//Set sender
+	Send(smptSocket, mailFrom);
+	Recv(smptSocket, recvBuffer, sizeof(recvBuffer));    //should recv "250 Mail OK"
+
+	//set receiver
+	Send(smptSocket, "rcpt to:<" + msg.sendTor + ">\r\n");
+	Recv(smptSocket, recvBuffer, sizeof(recvBuffer));    //should recv "250 Mail OK"
+
+	//send data
+	Send(smptSocket, data);
+	Recv(smptSocket, recvBuffer, sizeof(recvBuffer));    //should recv "354 End data with <CR><LF>.<CR><LF>"
+
+	QString sendFinalData = "to:" + msg.sendTor + "\r\n" + "subject:the newest IP\r\n\r\n" + data + "\r\n.\r\n";
+	Send(smptSocket, sendFinalData.toLatin1());
+	Recv(smptSocket, recvBuffer, sizeof(recvBuffer));
+
+	//一份邮件发送完毕
+}
+
+bool MailServer::netCheck()
+{
+	int ret = ::send(smptSocket, nullptr, 0, 0);
+	return ret != -1;
 }

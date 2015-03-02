@@ -7,5 +7,11 @@
     "serverIp": "127.0.0.1",
     "serverPort": 0,
     "httpServerIp": "127.0.0.1",
-    "httpServerPort": 8080
+    "httpServerPort": 8080,
+    "httpServerTail": "activeemail",
+    "mailServerAddress": "smpt.163.com",
+    "mailServerUsrName": "ytalkadmin@163.com",
+    "mailServerUsrPassword": "jieran753",
+    "mailServerSubject": "激活你的YTalk帐号",
+    "mailServerContent": "你好！\n\n感谢你注册YTalk帐号。\n你的登陆邮箱为:%1。请点击以下链接激活你的帐号:http:%2//%3/%4?email=%5&ticket=%6\n\n如果以上链接无法点击，请将上面的地址复制到你的浏览器(如IE)的地址栏进入YTalk激活界面。 （该链接在48小时内有效，48小时后需要重新注册） "
 }

@@ -117,12 +117,6 @@
     <ClCompile Include="network\httpServer\HttpServer.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_MailServer.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_MailServer.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="network\mailServer\MailServer.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
