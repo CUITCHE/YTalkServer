@@ -16,6 +16,7 @@ SettingHelper::SettingHelper()
 	QJsonParseError error;
 	QJsonDocument json = QJsonDocument::fromJson(data, &error);
 	if (error.error != QJsonParseError::NoError){
+		qDebug() << error.errorString();
 		json = QJsonDocument::fromJson("{}");
 	}
 	auto info = json.toVariant().toMap();

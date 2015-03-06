@@ -22,7 +22,6 @@ void Recv(int& s, char* buf, int len) {
 
 MailServer::MailServer(QObject *parent)
 	: QThread(parent)
-	, serverSocketStep(0)
 	, waitToSendList(new QList<MsgSend>)
 	, username(new QString)
 	, password(new QString)
@@ -34,7 +33,11 @@ MailServer::MailServer(QObject *parent)
 
 MailServer::~MailServer()
 {
-
+	delete waitToSendList;
+	delete username;
+	delete password;
+	delete smtpServerAddress;
+	delete mutex;
 }
 void MailServer::sendMail(const QByteArray &sendTor, const QByteArray &sendData)
 {
@@ -180,8 +183,13 @@ void MailServer::send_impl(const MsgSend &msg)
 {
 	static const QByteArray mailFrom = "mail from:<" + username->toLatin1() + ">\r\n";
 	static const QByteArray data = "data\r\n";
-
+	static const QString subject = SettingHelper::instance()->getValue("mailServerSubject").toString();
+	static const QString serverPort = SettingHelper::instance()->getValue("httpServerPort").toString();
+	static const QString serverIp = SettingHelper::instance()->getValue("httpServerIp").toString();
+	static const QString httpServerUrl = QString("http://") + serverIp + QString(":") + (serverPort)+SettingHelper::instance()->getValue("httpServerTail").toString();
 	static char recvBuffer[1024];
+
+	QString mailServerContent = SettingHelper::instance()->getValue("mailServerContent").toString().toLatin1();
 	//Set sender
 	Send(smptSocket, mailFrom);
 	Recv(smptSocket, recvBuffer, sizeof(recvBuffer));    //should recv "250 Mail OK"
@@ -194,7 +202,8 @@ void MailServer::send_impl(const MsgSend &msg)
 	Send(smptSocket, data);
 	Recv(smptSocket, recvBuffer, sizeof(recvBuffer));    //should recv "354 End data with <CR><LF>.<CR><LF>"
 
-	QString sendFinalData = "to:" + msg.sendTor + "\r\n" + "subject:the newest IP\r\n\r\n" + data + "\r\n.\r\n";
+	QString sendFinalData = "to:" + msg.sendTor + "\r\n" + QString("subject:%1\r\n\r\n").arg(subject) + 
+		mailServerContent.arg(QString(msg.sendTor)).arg(httpServerUrl).arg(QString(msg.sendData)) + "\r\n.\r\n";
 	Send(smptSocket, sendFinalData.toLatin1());
 	Recv(smptSocket, recvBuffer, sizeof(recvBuffer));
 

@@ -1,17 +1,23 @@
-{
+ï»¿{
+
     "DBServerName": "127.0.0.1",
+
     "DBServerPort": "14569",
+
     "DBDatabaseName": "ytalk",
     "DBUserName": "ytalk_sa",
     "DBPassword": "123456",
+
     "serverIp": "127.0.0.1",
     "serverPort": 0,
     "httpServerIp": "127.0.0.1",
     "httpServerPort": 8080,
-    "httpServerTail": "activeemail",
+    "httpServerTail": "/activeemail",
     "mailServerAddress": "smpt.163.com",
+
     "mailServerUsrName": "ytalkadmin@163.com",
     "mailServerUsrPassword": "jieran753",
-    "mailServerSubject": "¼¤»îÄãµÄYTalkÕÊºÅ",
-    "mailServerContent": "ÄãºÃ£¡\n\n¸ĞĞ»Äã×¢²áYTalkÕÊºÅ¡£\nÄãµÄµÇÂ½ÓÊÏäÎª:%1¡£Çëµã»÷ÒÔÏÂÁ´½Ó¼¤»îÄãµÄÕÊºÅ:http:%2//%3/%4?email=%5&ticket=%6\n\nÈç¹ûÒÔÉÏÁ´½ÓÎŞ·¨µã»÷£¬Çë½«ÉÏÃæµÄµØÖ·¸´ÖÆµ½ÄãµÄä¯ÀÀÆ÷(ÈçIE)µÄµØÖ·À¸½øÈëYTalk¼¤»î½çÃæ¡£ £¨¸ÃÁ´½ÓÔÚ48Ğ¡Ê±ÄÚÓĞĞ§£¬48Ğ¡Ê±ºóĞèÒªÖØĞÂ×¢²á£© "
+    "mailServerSubject": "æ¿€æ´»ä½ çš„YTalkå¸å·",
+    "mailServerContent": "ä½ å¥½ï¼\n\næ„Ÿè°¢ä½ æ³¨å†ŒYTalkå¸å·ã€‚\nä½ çš„ç™»é™†é‚®ç®±ä¸º:%1ã€‚è¯·ç‚¹å‡»ä»¥ä¸‹é“¾æ¥æ¿€æ´»ä½ çš„å¸å·:%2?%3\n\nå¦‚æœä»¥ä¸Šé“¾æ¥æ— æ³•ç‚¹å‡»ï¼Œè¯·å°†ä¸Šé¢çš„åœ°å€å¤åˆ¶åˆ°ä½ çš„æµè§ˆå™¨(å¦‚IE)çš„åœ°å€æ è¿›å…¥YTalkæ¿€æ´»ç•Œé¢ã€‚ ï¼ˆè¯¥é“¾æ¥åœ¨48å°æ—¶å†…æœ‰æ•ˆï¼Œ48å°æ—¶åéœ€è¦é‡æ–°æ³¨å†Œï¼‰"
+
 }

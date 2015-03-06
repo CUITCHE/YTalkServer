@@ -32,7 +32,6 @@ protected:
 	//网络检测
 	bool netCheck();
 private:
-	int serverSocketStep;			//连接到邮件服务器的序号标记。
 	QList<MsgSend> *waitToSendList;	//待发送列表
 	int smptSocket;	//邮件socket
 	QString *username;		//邮件服务的帐号

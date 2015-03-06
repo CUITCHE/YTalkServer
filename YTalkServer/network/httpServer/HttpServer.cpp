@@ -82,19 +82,32 @@ void HttpServer::onReadyRead()
 	QString info(data);
 	//获取每一行信息
 	QStringList tokens(info.split("\r\n"));
-	if (tokens.size() > 0 && tokens.at(0).contains("GET")){
-		//得到中间的参数段
-		QStringList temp = tokens.at(0).split(" ");
-		if (temp.size() >= 2){
-			//得到参数xxx?123=4232&3213=432
-			QStringList params = temp.at(1).split("?");
-			//判断是否是一个合法的url的参数
-			if (params.size() == 2){
-				this->mailAddressValidate(sock, params.at(1).split("&"));
-				return;
-			}
+	//直接用try-catch块捕获异常，之后返回404即可
+	try{
+		if (!tokens.at(0).contains("GET")){
+			throw "";
 		}
+		QStringList tmp = tokens.at(0).split(" ");
+		if (!tmp.at(1).contains(SettingHelper::instance()->getValue("httpServerTail").toString())){
+			throw "";
+		}
+		this->mailAddressValidate(sock, tmp.at(1).split("?").at(1).split("&"));
+		return;
 	}
+	catch (...){/*do nothing*/}
+// 	if (tokens.size() > 0 && tokens.at(0).contains("GET")){
+// 		//得到中间的参数段
+// 		QStringList temp = tokens.at(0).split(" ");
+// 		if (temp.size() >= 2){
+// 			//得到参数xxx?123=4232&3213=432
+// 			QStringList params = temp.at(1).split("?");
+// 			//判断是否是一个合法的url的参数
+// 			if (params.size() == 2){
+// 				this->mailAddressValidate(sock, params.at(1).split("&"));
+// 				return;
+// 			}
+// 		}
+// 	}
 	this->_404(sock);
 }
 
