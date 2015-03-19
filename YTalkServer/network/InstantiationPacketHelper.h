@@ -8,16 +8,19 @@
 	
 	purpose:	根据客户端请求的数据包，生成相应的Pakcet类
 *********************************************************************/
-class Pakcet;
+class Packet;
 class InstantiationPacketHelper
 {
 public:
 	InstantiationPacketHelper();
 	~InstantiationPacketHelper();
 	//通过协议号，返回相应的Packet类的指针对象
-	static Pakcet* getPacketByProtocol(const int protocol);
+	static Packet* getPacketByProtocol(const int protocol);
 private:
 	
 };
+namespace net{
+	Packet* get(const int protocol);
+}
 
 #endif // INSTANTIATIONPACKETHELPER_H

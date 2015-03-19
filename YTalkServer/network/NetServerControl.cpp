@@ -29,7 +29,7 @@ void NetServerControl::newConnectionProcess()
 
 void NetServerControl::doListen()
 {
-	GET_INSTANCE(SettingHelper);
+	auto ins = get<SettingHelper>();
 	auto ip = ins->getValue("serverIp").toString();
 	auto port = ins->getValue("serverPort").toInt();
 	bool ret = serverSocket->listen(QHostAddress(ip),port);

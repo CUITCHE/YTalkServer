@@ -13,7 +13,9 @@
 namespace net{
 	enum NetCommunicationProtocol{
 		Empty,
-		Test
+		Test,
+		UserLogin,
+		ServerBack,
 	};
 }
 #endif // NetCommunicationProtocol_H__

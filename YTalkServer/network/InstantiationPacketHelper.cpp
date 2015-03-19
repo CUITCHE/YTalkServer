@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "NetCommunicationProtocol.h"
 #include "InstantiationPacketHelper.h"
-#include "test/TestPacket.hpp"
+#include "packets.h"
 
 using namespace net;
 
@@ -15,13 +15,13 @@ InstantiationPacketHelper::~InstantiationPacketHelper()
 
 }
 
-Pakcet* InstantiationPacketHelper::getPacketByProtocol(const int protocol)
+Packet* InstantiationPacketHelper::getPacketByProtocol(const int protocol)
 {
-	Pakcet *pck = nullptr;
+	Packet *pck = nullptr;
 	switch (protocol)
 	{
 	case Empty:
-		pck = new Pakcet;
+		pck = new Packet;
 		break;
 	case Test:
 		pck = new TestPacket;
@@ -31,4 +31,10 @@ Pakcet* InstantiationPacketHelper::getPacketByProtocol(const int protocol)
 		break;
 	}
 	return pck;
+}
+namespace net{
+	Packet* get(const int protocol)
+	{
+		return InstantiationPacketHelper::getPacketByProtocol(protocol);
+	}
 }

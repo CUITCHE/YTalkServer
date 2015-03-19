@@ -26,7 +26,7 @@ public:
 	void qvariant2qobject(const QVariantMap &variant);
 
 	//获取指定数据成员的property
-	QVariant getValue(const char *key);
+	QVariant getValue(const char *key) const;
 
 	//设置指定数据成员的property
 	void setValue(const char *key, const QVariant &val);

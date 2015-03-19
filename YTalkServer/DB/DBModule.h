@@ -11,6 +11,7 @@
 *********************************************************************/
 #include "MSSQLConnectionHelper.h"
 #include <QThread>
+class QDateTime;
 class DBModule: QThread
 {
 	PREPARE_INSTANCE_DECLARE(DBModule)
@@ -28,7 +29,18 @@ public:
 	void testQuery()const;
 
 	//帐号验证服务
-	bool accountValidate(const QString &email, const QString &validateCode)const;
+	bool accountValidate(const QString &email, const QString &validateCode) const;
+
+	//用户登陆
+	//result: 0无错误，1帐号未激活，2帐号或密码不存
+	//只有返回值为false，result值才有意义
+	bool userLogin(const QString &email, const QString &pwd, int &result)const;
+
+	//用户注册
+	bool userReg(const QString &email, const QString &pwd, const QDateTime &timeReg, const QString &whereReg)const;
+
+	//用户是否存在
+	bool userExist(const QString &email)const;
 private:
 	DBModule(QObject *parent = 0);
 	~DBModule();

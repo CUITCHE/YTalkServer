@@ -63,12 +63,6 @@
     <ClCompile Include="code\stdafx.cpp">
       <Filter>GeneralCode</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_Pakcet.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_Pakcet.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="code\AbstractParseJson.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -77,9 +71,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_AbstractParseJson.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Pakcet.cpp">
-      <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="code\SettingInfo.cpp">
       <Filter>Source Files</Filter>
@@ -120,6 +111,36 @@
     <ClCompile Include="network\mailServer\MailServer.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="network\Transaction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Transaction.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Transaction.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Packet.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Packet.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Packet.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_UserLoginPacket.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_UserLoginPacket.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ServerBackPacket.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ServerBackPacket.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DB\DBModule.h">
@@ -140,6 +161,9 @@
     <ClInclude Include="network\InstantiationPacketHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="network\packets.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="DB\MSSQLConnectionHelper.h">
@@ -147,9 +171,6 @@
     </CustomBuild>
     <CustomBuild Include="network\NetServerControl.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="code\Pakcet.h">
-      <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="code\AbstractParseJson.h">
       <Filter>Generated Files</Filter>
@@ -168,6 +189,18 @@
     </CustomBuild>
     <CustomBuild Include="network\mailServer\MailServer.h">
       <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="network\Transaction.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="code\Packet.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packets\UserLoginPacket.hpp">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packets\ServerBackPacket.hpp">
+      <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

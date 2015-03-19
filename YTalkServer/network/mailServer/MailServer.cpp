@@ -138,7 +138,7 @@ bool MailServer::connectToMailServer()
 		memset(&addr_in, 0, sizeof(addr_in));
 		addr_in.sin_family = AF_INET;
 		addr_in.sin_port = htons(25);    //port of SMTP
-		GET_INSTANCE(SettingHelper);
+		auto ins = get<SettingHelper>();
 		QHostInfo ph = QHostInfo::fromName(ins->getValue("mailServerAddress").toString());
 		ULONG address = ph.addresses().at(0).toIPv4Address();
 		memcpy(&addr_in.sin_addr.S_un.S_addr, &address, sizeof(address));

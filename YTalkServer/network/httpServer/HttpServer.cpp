@@ -8,7 +8,7 @@ HttpServer::HttpServer(QObject *parent)
 	: QObject(parent)
 	, m_listeningSocket(new QTcpServer(this))
 {
-	GET_INSTANCE(SettingHelper);
+	auto ins = get<SettingHelper>();
 	auto ip = ins->getValue("httpServerIp").toString();
 	auto port = ins->getValue("httpServerPort").toInt();
 	auto ret = m_listeningSocket->listen(QHostAddress(ip), port);
@@ -41,7 +41,7 @@ void HttpServer::mailAddressValidate(QTcpSocket *sock, const QStringList &params
 			if (validateCode.size() != 20){
 				throw "";
 			}
-			GET_INSTANCE(DBModule);
+			auto ins = get<DBModule>();
 	
 			QString retinfo = QString("<h1>” œ‰µÿ÷∑£∫");
 			retinfo.append(email).append("  ◊¢≤·");

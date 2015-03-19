@@ -1,18 +1,17 @@
 #include "stdafx.h"
 #include "NetLogicMainProcess.h"
+#include "defs.h"
+#include "Packet.h"
+#include "Transaction.h"
 #include "NetServerControl.h"
 #include "InstantiationPacketHelper.h"
-#include "Pakcet.h"
-#ifdef __surrenderconsole__
-#undef __surrenderconsole__
-#endif
-#define __surrenderconsole__ QThread::msleep(0);
-
+#include <QTcpSocket>
 NetLogicMainProcess::NetLogicMainProcess(QObject *parent)
 	: QThread(parent)
 	, m_socket(new NetServerControl(this))
 	, active(false)
 	, permit(false)
+	, transactionObject(new Transaction(this))
 {
 	connect(this, &QThread::finished, this, [&](){active = false; });
 }
@@ -75,9 +74,11 @@ void NetLogicMainProcess::task(const NetCommunicationModule &NCM)
 		return;
 	}
 	QVariantMap data = jsonDocument.toVariant().toMap();
-	int protocol = Pakcet::Protocol(data);
-	auto pck = InstantiationPacketHelper::getPacketByProtocol(protocol);
+	int protocol = Packet::Protocol(data);
+	auto pck = net::get(protocol);
 	pck->write(data);
+	//事务开始
+	transactionObject->lock(pck, sock);
 	switch (protocol)
 	{
 	case Empty:
@@ -86,5 +87,16 @@ void NetLogicMainProcess::task(const NetCommunicationModule &NCM)
 	default:
 		break;
 	}
+	//事务结束
+	transactionObject->unlock();
+}
+
+void NetLogicMainProcess::write(Packet *pck, QTcpSocket *sock)const
+{
+	auto raw = pck->read();
+	QJsonDocument jsonDocument = QJsonDocument::fromVariant(raw);
+	QByteArray data = jsonDocument.toJson();
+	//向远程socket发送数据
+	sock->write(data);
 }
 

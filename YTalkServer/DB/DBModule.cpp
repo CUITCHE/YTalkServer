@@ -18,7 +18,7 @@ DBModule::~DBModule()
 void DBModule::initConnect()
 {
 	//从配置文件中读取数据库的相关信息
-	GET_INSTANCE(SettingHelper);
+	auto ins = get<SettingHelper>();
 	databaseInfo = const_cast<SettingInfo*>(ins->getSettingInfo());
 	QSqlError::ErrorType errorType;
 	qDebug() << "****************数据库服务模块初始化****************";
@@ -49,7 +49,7 @@ void DBModule::reconnect()
 {
 	disconnect();
 	if (databaseInfo == nullptr){
-		GET_INSTANCE(SettingHelper);
+		auto ins = get<SettingHelper>();
 		databaseInfo = const_cast<SettingInfo*>(ins->getSettingInfo());
 	}
 	MSSQLConnectionHelper::initConnection(*databaseInfo);
@@ -65,10 +65,7 @@ bool DBModule::accountValidate(const QString &email, const QString &validateCode
 {
 	//之后可能会加入密码的md5值的判断
 	QDateTime curTime = QDateTime::currentDateTime();
-	QString sql = QString("select identifydate from ytalk_user where mailAddress = '%1' AND identifycode='%2'")
-		.arg(email)
-		.arg(validateCode);
-	auto ret = MSSQLConnectionHelper::execQuery(sql);
+	auto ret = MSSQLConnectionHelper::execQuery("select identifydate from ytalk_user where mailAddress = ? AND identifycode = ?",email, validateCode);
 	if (!ret.next()){
 		return false;
 	}
@@ -77,4 +74,39 @@ bool DBModule::accountValidate(const QString &email, const QString &validateCode
 		return true;
 	}
 	return false;
+}
+
+bool DBModule::userLogin(const QString &email, const QString &pwd, int &result) const
+{
+	auto ret = MSSQLConnectionHelper::execQuery("select active from ytalk_user where mailAddress = ? AND password = ?", email, pwd);
+	result = 0;
+	if (!ret.next()){
+		result = 2;
+		return false;
+	}
+	bool active = ret.value("active").toBool();
+	if (active == false){
+		result = 1;
+		return false;
+	}
+	return true;
+}
+
+bool DBModule::userReg(const QString &email, const QString &pwd, const QDateTime &timeReg, const QString &whereReg) const
+{
+	if (userExist(email) == false){
+		return false;
+	}
+	auto ret = MSSQLConnectionHelper::execDML("insert into ytalk_user(mailAddress,password,registerDate,registerWhere) values(?,?,?,?)",
+		email, pwd, timeReg, whereReg);
+
+	return ret == 1 ? true : false;
+}
+
+bool DBModule::userExist(const QString &email) const
+{
+	QString sql = QString().arg(email);
+	auto ret = MSSQLConnectionHelper::execDML("select id from ytalk_user where mailAddress = ?", email);
+
+	return ret == 1 ? true : false;
 }

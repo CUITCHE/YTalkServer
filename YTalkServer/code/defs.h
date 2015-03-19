@@ -44,7 +44,15 @@
 	void Class::deleteInstance(){ delete g_instance; g_instance = nullptr; }\
 
 //获取指定类的实例，返回ins指针变量
-#define GET_INSTANCE(Class) Class* ins = Class::instance()
+template<typename Instance>
+inline Instance* get(){return Instance::instance();}
 //丢弃指定类的实例，在需要的时候，再生成新的实例
-#define POP_INSTANCE(Class) Class::deleteInstance()
+template<typename Instance>
+inline void pop(){ Instance::deleteInstance(); }
+
+#ifdef __surrenderconsole__
+#undef __surrenderconsole__
+#endif
+#define __surrenderconsole__ QThread::msleep(0);
+
 #endif // DEFS_H

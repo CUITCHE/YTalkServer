@@ -34,40 +34,27 @@ void MSSQLConnectionHelper::closeConnection()
 	QSqlDatabase::removeDatabase(connectionName);
 }
 
-const QSqlQuery MSSQLConnectionHelper::execQuery(const QString &execSql)
+void MSSQLConnectionHelper::execQuery(QSqlQuery &query)
 {
-	QSqlQuery query;
 	checkDB();
-	if (query.prepare(execSql))
-	{
-		if (query.exec())
-			return query;
-	}
-	query.clear();
-	return query;
+	if (!query.exec())
+		query.clear();
 }
 
-int MSSQLConnectionHelper::execDML(const QString &execSql)
+int MSSQLConnectionHelper::execDML(QSqlQuery &query)
 {
-	QSqlQuery query;
 	checkDB();
-	if (query.prepare(execSql))
-	{
-		if (query.exec())
-			return query.numRowsAffected();
-	}
+	if (query.exec())
+		return query.numRowsAffected();
 	return -1;
 }
 
-int MSSQLConnectionHelper::execScalar(const QString &execSql)
+int MSSQLConnectionHelper::execScalar(QSqlQuery &execSql)
 {
 	QSqlQuery query;
 	checkDB();
-	if (query.prepare(execSql))
-	{
-		if (query.exec())
-			return query.size();
-	}
+	if (query.exec())
+		return query.size();
 	return -1;
 }
 

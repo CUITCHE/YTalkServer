@@ -8,12 +8,13 @@
 	
 	purpose:	≤‚ ‘¿‡
 *********************************************************************/
-#include "Pakcet.h"
+#include "Packet.h"
 
-class TestPacket :public Pakcet
+class TestPacket :public Packet
 {
 	Q_OBJECT
 
+	PACKET_STRUCTION(Test)
 	QT_MOC_MINE_DEFINITION(QString, name, Name);
 	QT_MOC_MINE_DEFINITION(int, count, Count);
 	QT_MOC_MINE_DEFINITION(QString, password, Password);
